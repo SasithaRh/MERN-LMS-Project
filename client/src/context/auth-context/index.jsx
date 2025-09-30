@@ -40,6 +40,7 @@ export default function AuthProvider({ children }) {
       });
     }
   }
+  
 
   //check auth user
 
