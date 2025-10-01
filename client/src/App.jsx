@@ -6,6 +6,7 @@ import InstructorDashboardpage from "./pages/instructor";
 import StudentHomePage from "./pages/student/home";
 import RouteGuard from "./components/route-guard";
 import NotFoundPage from "./pages/not-found";
+import AddNewCoursePage from "./pages/instructor/add-new-course";
 
 function App() {
 
@@ -28,6 +29,16 @@ function App() {
         element={
           <RouteGuard
             element={<InstructorDashboardpage />}
+            authenticated={auth?.authenticate}
+            user={auth?.user}
+          />
+        }
+      />
+           <Route
+        path="/instructor/create-new-course"
+        element={
+          <RouteGuard
+            element={<AddNewCoursePage />}
             authenticated={auth?.authenticate}
             user={auth?.user}
           />

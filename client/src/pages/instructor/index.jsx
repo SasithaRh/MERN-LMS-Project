@@ -10,7 +10,6 @@ import { useContext, useEffect, useState } from "react";
 function InstructorDashboardpage() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const { resetCredentials,auth } = useContext(AuthContext);
- const [openProfileMenu, setOpenProfileMenu] = useState(false);
 
 
   const menuItems = [
@@ -84,7 +83,7 @@ function InstructorDashboardpage() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white px-6 py-4 flex justify-between items-center shadow-md">
+        <header className="bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
           {/* Left: Title */}
           <h1 className="text-2xl font-bold tracking-wide">Dashboard</h1>
 
@@ -118,14 +117,9 @@ function InstructorDashboardpage() {
               </button>
 
               {/* Dropdown */}
-              {openProfileMenu && (
+             
                 <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden">
-                  <button
-                    onClick={() => setActiveTab("profile")}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  >
-                    Profile
-                  </button>
+             
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100"
@@ -133,7 +127,7 @@ function InstructorDashboardpage() {
                     Logout
                   </button>
                 </div>
-              )}
+              
             </div>
           </div>
         </header>
