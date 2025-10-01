@@ -5,7 +5,7 @@ import { AuthContext } from "./context/auth-context";
 import InstructorDashboardpage from "./pages/instructor";
 import StudentHomePage from "./pages/student/home";
 import RouteGuard from "./components/route-guard";
-
+import NotFoundPage from "./pages/not-found";
 
 function App() {
 
@@ -34,6 +34,7 @@ function App() {
         }
       />
       <Route path="home" element={<StudentHomePage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
     
   )
