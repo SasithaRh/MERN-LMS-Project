@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from "cors";
 import authRouters from './routes/auth-routes/index.js'
-
+import mediaRoutes from './routes/instructor-routes/media-routes.js';
 dotenv.config();
 
 
@@ -35,7 +35,7 @@ app.use(
 // app.use(cookieParser());
 app.use(express.json());
 app.use("/auth", authRouters);
-
+app.use("/media", mediaRoutes);
 app.listen(5000, () => {
     console.log('Server is running on port 5000!!!');
   });

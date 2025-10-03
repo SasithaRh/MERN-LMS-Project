@@ -7,10 +7,24 @@ import { Switch } from "../../../ui/switch";
 import { InstructorContext } from "../../../../context/instructor-context";
 import { Upload } from "lucide-react";
 import { useContext, useRef } from "react";
-
+import { courseCurriculumInitialFormData } from "../../../../config";
 function CourseCurriculum() {
   
+  const {
+    courseCurriculumFormData,
+    setCourseCurriculumFormData,
+   
+  } = useContext(InstructorContext);
 
+
+  function handleNewLecture() {
+    setCourseCurriculumFormData([
+      ...courseCurriculumFormData,
+      {
+        ...courseCurriculumInitialFormData[0],
+      },
+    ]);
+  }
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -39,13 +53,14 @@ function CourseCurriculum() {
       </CardHeader>
       <CardContent>
         <Button
-         
+         // disabled={!isCourseCurriculumFormDataValid() || mediaUploadProgress}
+          onClick={handleNewLecture}
         >
           Add Lecture
         </Button>
         
         <div className="mt-4 space-y-4">
-          
+           {courseCurriculumFormData.map((curriculumItem, index) => (
             <div className="border p-5 rounded-md">
               <div className="flex gap-5 items-center">
                 <h3 className="font-semibold">Lecture </h3>
@@ -58,7 +73,7 @@ function CourseCurriculum() {
                 <div className="flex items-center space-x-2">
                   <Switch
                    
-                    checked='checked'
+                    checked={true}
                     id={`freePreview`}
                   />
                   <Label htmlFor={`freePreview`}>
@@ -89,7 +104,7 @@ function CourseCurriculum() {
                 
               </div>
             </div>
-          
+               ))}
         </div>
       </CardContent>
     </Card>
