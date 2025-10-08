@@ -6,7 +6,7 @@ import { Label } from "../../../ui/label";
 import { Switch } from "../../../ui/switch";
 import { InstructorContext } from "../../../../context/instructor-context";
 import { Upload } from "lucide-react";
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import { courseCurriculumInitialFormData } from "../../../../config";
 import {
   mediaUploadService,
