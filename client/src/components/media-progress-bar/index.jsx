@@ -10,10 +10,7 @@ function MediaProgressbar({ isMediaUploading, progress }) {
       setShowProgress(true);
       setAnimatedProgress(progress);
     } else {
-      const timer = setTimeout(() => {
-        setShowProgress(false);
-      }, 1000);
-
+      const timer = setTimeout(() => setShowProgress(false), 1000);
       return () => clearTimeout(timer);
     }
   }, [isMediaUploading, progress]);
@@ -21,29 +18,51 @@ function MediaProgressbar({ isMediaUploading, progress }) {
   if (!showProgress) return null;
 
   return (
-    <div className="w-full bg-gray-200 rounded-full h-3 mt-5 mb-5 relative overflow-hidden">
-      <motion.div
-        className="bg-blue-600 h-3 rounded-full"
-        initial={{ width: 0 }}
-        animate={{
-          width: `${animatedProgress}%`,
-          transition: { duration: 0.5, ease: "easeInOut" },
-        }}
-      >
-        {progress >= 100 && isMediaUploading && (
+    <div className="w-full mt-5 mb-6">
+      {/* Label */}
+      <div className="flex justify-between mb-2 text-sm text-gray-600 font-medium">
+        <span>Uploading...</span>
+        <span>{Math.round(progress)}%</span>
+      </div>
+
+      {/* Progress bar container */}
+      <div className="relative w-full h-3 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full overflow-hidden shadow-inner">
+        {/* Animated progress */}
+        <motion.div
+          className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(147,51,234,0.6)]"
+          initial={{ width: 0 }}
+          animate={{
+            width: `${animatedProgress}%`,
+            transition: { duration: 0.4, ease: "easeInOut" },
+          }}
+        />
+
+        {/* Shimmer effect while uploading */}
+        {isMediaUploading && progress < 100 && (
           <motion.div
-            className="absolute top-0 left-0 right-0 bottom-0 bg-blue-400 opacity-50"
+            className="absolute top-0 left-0 h-full w-1/3 bg-white opacity-20 blur-md"
             animate={{
-              x: ["0%", "100%", "0%"],
+              x: ["-100%", "100%"],
             }}
             transition={{
-              duration: 2,
+              duration: 1.2,
               repeat: Infinity,
-              ease: "linear",
+              ease: "easeInOut",
             }}
           />
         )}
-      </motion.div>
+      </div>
+
+      {/* Success pulse when complete */}
+      {progress >= 100 && (
+        <motion.div
+          className="text-xs text-green-600 font-semibold mt-2 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          ✅ Upload Complete!
+        </motion.div>
+      )}
     </div>
   );
 }

@@ -6,11 +6,24 @@ import { AuthContext } from "../../context/auth-context";
 import { Bell } from "lucide-react";
 import { BarChart, Book, LogOut } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-
+import { fetchInstructorCourseListService } from "../../services";
+import { InstructorContext } from "../../context/instructor-context";
 function InstructorDashboardpage() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const { resetCredentials,auth } = useContext(AuthContext);
+ 
+  const { instructorCoursesList, setInstructorCoursesList } =
+    useContext(InstructorContext);
 
+
+  async function fetchAllCourses() {
+    const response = await fetchInstructorCourseListService();
+    if (response?.success) setInstructorCoursesList(response?.data);
+  }
+
+  useEffect(() => {
+    fetchAllCourses();
+  }, []);
 
   const menuItems = [
     {
@@ -23,7 +36,7 @@ function InstructorDashboardpage() {
       icon: Book,
       label: "Courses",
       value: "courses",
-      component: <InstructorCourses  />,
+      component: <InstructorCourses  listOfCourses={instructorCoursesList}/>,
     },
     {
       icon: LogOut,

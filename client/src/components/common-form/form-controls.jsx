@@ -14,6 +14,9 @@ function FormControls({ formControls = [], formData, setFormData }) {
     let element = null;
     const currentControlItemValue = formData[getControlItem.name] || "";
 
+    const baseInputClass =
+      "w-full bg-white/90 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-300 shadow-sm hover:shadow-md";
+
     switch (getControlItem.componentType) {
       case "input":
         element = (
@@ -22,6 +25,7 @@ function FormControls({ formControls = [], formData, setFormData }) {
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             type={getControlItem.type}
+            className={baseInputClass}
             value={currentControlItemValue}
             onChange={(event) =>
               setFormData({
@@ -43,17 +47,17 @@ function FormControls({ formControls = [], formData, setFormData }) {
             }
             value={currentControlItemValue}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger
+              className={`w-full rounded-xl border-gray-300 bg-white/90 focus:ring-2 focus:ring-indigo-400 transition-all duration-300`}
+            >
               <SelectValue placeholder={getControlItem.label} />
             </SelectTrigger>
-            <SelectContent>
-              {getControlItem.options && getControlItem.options.length > 0
-                ? getControlItem.options.map((optionItem) => (
-                    <SelectItem key={optionItem.id} value={optionItem.id}>
-                      {optionItem.label}
-                    </SelectItem>
-                  ))
-                : null}
+            <SelectContent className="bg-white rounded-xl shadow-lg">
+              {getControlItem.options?.map((optionItem) => (
+                <SelectItem key={optionItem.id} value={optionItem.id}>
+                  {optionItem.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         );
@@ -64,6 +68,7 @@ function FormControls({ formControls = [], formData, setFormData }) {
             id={getControlItem.name}
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
+            className={`${baseInputClass} min-h-[100px]`}
             value={currentControlItemValue}
             onChange={(event) =>
               setFormData({
@@ -82,6 +87,7 @@ function FormControls({ formControls = [], formData, setFormData }) {
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             type={getControlItem.type}
+            className={baseInputClass}
             value={currentControlItemValue}
             onChange={(event) =>
               setFormData({
@@ -98,11 +104,16 @@ function FormControls({ formControls = [], formData, setFormData }) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      {formControls.map((controleItem) => (
-        <div key={controleItem.name}>
-          <Label htmlFor={controleItem.name}>{controleItem.label}</Label>
-          {renderComponentByType(controleItem)}
+    <div className="flex flex-col gap-5 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6 rounded-2xl shadow-md">
+      {formControls.map((controlItem) => (
+        <div key={controlItem.name} className="space-y-2">
+          <Label
+            htmlFor={controlItem.name}
+            className="font-semibold text-gray-700 tracking-wide"
+          >
+            {controlItem.label}
+          </Label>
+          {renderComponentByType(controlItem)}
         </div>
       ))}
     </div>

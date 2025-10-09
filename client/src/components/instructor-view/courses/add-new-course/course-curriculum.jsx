@@ -5,16 +5,16 @@ import { Input } from "../../../ui/input";
 import { Label } from "../../../ui/label";
 import { Switch } from "../../../ui/switch";
 import { InstructorContext } from "../../../../context/instructor-context";
-import { Upload } from "lucide-react";
+import { Upload, Video, Trash2, PlusCircle } from "lucide-react";
 import { useContext } from "react";
 import { courseCurriculumInitialFormData } from "../../../../config";
 import {
   mediaUploadService,
-  mediaDeleteService
+  mediaDeleteService,
 } from "../../../../services";
 import VideoPlayer from "../../../video-player";
+
 function CourseCurriculum() {
-  
   const {
     courseCurriculumFormData,
     setCourseCurriculumFormData,
@@ -22,9 +22,7 @@ function CourseCurriculum() {
     setMediaUploadProgress,
     mediaUploadProgressPercentage,
     setMediaUploadProgressPercentage,
-   
   } = useContext(InstructorContext);
-
 
   function handleNewLecture() {
     setCourseCurriculumFormData([
@@ -34,40 +32,36 @@ function CourseCurriculum() {
       },
     ]);
   }
-   function handleCourseTitleChange(event, currentIndex) {
+
+  function handleCourseTitleChange(event, currentIndex) {
     let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
     cpyCourseCurriculumFormData[currentIndex] = {
       ...cpyCourseCurriculumFormData[currentIndex],
       title: event.target.value,
     };
-
     setCourseCurriculumFormData(cpyCourseCurriculumFormData);
   }
+
   function handleFreePreviewChange(currentValue, currentIndex) {
     let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
     cpyCourseCurriculumFormData[currentIndex] = {
       ...cpyCourseCurriculumFormData[currentIndex],
       freePreview: currentValue,
     };
-
     setCourseCurriculumFormData(cpyCourseCurriculumFormData);
   }
-    async function handleSingleLectureUpload(event, currentIndex) {
-    const selectedFile = event.target.files[0];
 
+  async function handleSingleLectureUpload(event, currentIndex) {
+    const selectedFile = event.target.files[0];
     if (selectedFile) {
       const videoFormData = new FormData();
       videoFormData.append("file", selectedFile);
-
       try {
         setMediaUploadProgress(true);
         const response = await mediaUploadService(
           videoFormData,
           setMediaUploadProgressPercentage
-          
         );
-        console.log(response);
-        
         if (response.success) {
           let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
           cpyCourseCurriculumFormData[currentIndex] = {
@@ -83,6 +77,7 @@ function CourseCurriculum() {
       }
     }
   }
+
   function isCourseCurriculumFormDataValid() {
     return courseCurriculumFormData.every((item) => {
       return (
@@ -94,7 +89,7 @@ function CourseCurriculum() {
     });
   }
 
-   async function handleReplaceVideo(currentIndex) {
+  async function handleReplaceVideo(currentIndex) {
     let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
     const getCurrentVideoPublicId =
       cpyCourseCurriculumFormData[currentIndex].public_id;
@@ -113,102 +108,149 @@ function CourseCurriculum() {
       setCourseCurriculumFormData(cpyCourseCurriculumFormData);
     }
   }
-  console.log(courseCurriculumFormData)
+
+  async function handleDeleteLecture(currentIndex) {
+    let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+    const getCurrentSelectedVideoPublicId =
+      cpyCourseCurriculumFormData[currentIndex].public_id;
+
+    const response = await mediaDeleteService(getCurrentSelectedVideoPublicId);
+
+    if (response?.success) {
+      cpyCourseCurriculumFormData = cpyCourseCurriculumFormData.filter(
+        (_, index) => index !== currentIndex
+      );
+      setCourseCurriculumFormData(cpyCourseCurriculumFormData);
+    }
+  }
+
   return (
-    <Card>
-      <CardHeader className="flex flex-row justify-between">
-        <CardTitle>Create Course Curriculum</CardTitle>
+    <Card className="shadow-xl border-none rounded-xl">
+      {/* Header Section */}
+      <CardHeader className="flex flex-row justify-between items-center bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-500 text-white rounded-t-xl px-6 py-5">
+        <CardTitle className="text-2xl font-extrabold tracking-wide">
+          Course Curriculum
+        </CardTitle>
         <div>
           <Input
             type="file"
-           
             accept="video/*"
             multiple
             className="hidden"
             id="bulk-media-upload"
-           
           />
           <Button
             as="label"
             htmlFor="bulk-media-upload"
-            variant="outline"
-            className="cursor-pointer"
-            
+            className="bg-white text-indigo-600 font-semibold hover:bg-gray-100 flex items-center gap-2"
           >
-            <Upload className="w-4 h-5 mr-2" />
+            <Upload className="w-5 h-5" />
             Bulk Upload
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
+
+      <CardContent className="p-6">
+        {/* Add Lecture Button */}
         <Button
           disabled={!isCourseCurriculumFormDataValid() || mediaUploadProgress}
           onClick={handleNewLecture}
+          className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-500 text-white hover:opacity-90 transition shadow-md"
         >
+          <PlusCircle className="h-5 w-5" />
           Add Lecture
         </Button>
-         {mediaUploadProgress ? (
-          <MediaProgressbar
-            isMediaUploading={mediaUploadProgress}
-            progress={mediaUploadProgressPercentage}
-          />
-        ) : null}
-        <div className="mt-4 space-y-4">
-           {courseCurriculumFormData.map((curriculumItem, index) => (
-            <div className="border p-5 rounded-md">
-              <div className="flex gap-5 items-center">
-                <h3 className="font-semibold">Lecture {index + 1}</h3>
+
+        {/* Upload Progress */}
+        {mediaUploadProgress && (
+          <div className="mt-4">
+            <MediaProgressbar
+              isMediaUploading={mediaUploadProgress}
+              progress={mediaUploadProgressPercentage}
+            />
+          </div>
+        )}
+
+        {/* Curriculum Items */}
+        <div className="mt-6 space-y-6">
+          {courseCurriculumFormData.map((curriculumItem, index) => (
+            <div
+              key={index}
+              className="border border-gray-200 bg-gray-50 rounded-xl p-6 shadow-sm hover:shadow-md transition"
+            >
+              <div className="flex flex-wrap gap-4 items-center justify-between">
+                <h3 className="font-bold text-lg text-gray-800">
+                  Lecture {index + 1}
+                </h3>
                 <Input
                   name={`title-${index + 1}`}
                   placeholder="Enter lecture title"
-                  className="max-w-96"
+                  className="max-w-sm"
                   onChange={(event) => handleCourseTitleChange(event, index)}
                   value={courseCurriculumFormData[index]?.title}
                 />
                 <div className="flex items-center space-x-2">
-                   <Switch
+                  <Switch
                     onCheckedChange={(value) =>
                       handleFreePreviewChange(value, index)
                     }
                     checked={courseCurriculumFormData[index]?.freePreview}
                     id={`freePreview-${index + 1}`}
                   />
-                  <Label htmlFor={`freePreview-${index + 1}`}>
+                  <Label
+                    htmlFor={`freePreview-${index + 1}`}
+                    className="text-gray-700"
+                  >
                     Free Preview
                   </Label>
                 </div>
               </div>
-              <div className="mt-6">
+
+              {/* Video Section */}
+              <div className="mt-5">
                 {courseCurriculumFormData[index]?.videoUrl ? (
-                  <div className="flex gap-3">
+                  <div className="flex flex-wrap gap-4 items-start">
                     <VideoPlayer
                       url={courseCurriculumFormData[index]?.videoUrl}
                       width="450px"
                       height="200px"
                     />
-                    <Button onClick={() => handleReplaceVideo(index)}>
-                      Replace Video
-                    </Button>
-                    <Button
-                     
-                      className="bg-red-900"
-                    >
-                      Delete Lecture
-                    </Button>
+                    <div className="flex flex-col gap-3">
+                      <Button
+                        onClick={() => handleReplaceVideo(index)}
+                        variant="outline"
+                        className="flex items-center gap-2 text-blue-600 hover:bg-blue-50"
+                      >
+                        <Video className="w-4 h-4" />
+                        Replace Video
+                      </Button>
+                      <Button
+                        onClick={() => handleDeleteLecture(index)}
+                        className="flex items-center gap-2 bg-red-600 text-white hover:bg-red-700"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete Lecture
+                      </Button>
+                    </div>
                   </div>
                 ) : (
-                  <Input
-                    type="file"
-                    accept="video/*"
-                    onChange={(event) =>
-                      handleSingleLectureUpload(event, index)
-                    }
-                    className="mb-4"
-                  />
+                  <div className="mt-3">
+                    <Label className="text-gray-700 mb-2 block">
+                      Upload Lecture Video
+                    </Label>
+                    <Input
+                      type="file"
+                      accept="video/*"
+                      onChange={(event) =>
+                        handleSingleLectureUpload(event, index)
+                      }
+                      className="cursor-pointer bg-white hover:border-indigo-500 transition"
+                    />
+                  </div>
                 )}
               </div>
             </div>
-               ))}
+          ))}
         </div>
       </CardContent>
     </Card>
