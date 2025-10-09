@@ -7,6 +7,7 @@ import StudentHomePage from "./pages/student/home";
 import RouteGuard from "./components/route-guard";
 import NotFoundPage from "./pages/not-found";
 import AddNewCoursePage from "./pages/instructor/add-new-course";
+import StudentViewCommonLayout from "./components/student-view/common-layout";
 
 function App() {
 
@@ -54,8 +55,20 @@ function App() {
           />
         }
       />
+         <Route
+        path="/"
+        element={
+          <RouteGuard
+            element={<StudentViewCommonLayout />}
+            authenticated={auth?.authenticate}
+            user={auth?.user}
+          />
+        }
+      >
       <Route path="home" element={<StudentHomePage />} />
-      <Route path="*" element={<NotFoundPage />} />
+     
+      </Route>
+       <Route path="*" element={<NotFoundPage />} />
     </Routes>
     
   )

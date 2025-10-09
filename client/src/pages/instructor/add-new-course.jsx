@@ -147,13 +147,26 @@ function AddNewCoursePage() {
         <CardContent>
           <div className="container mx-auto p-4">
             <Tabs defaultValue="curriculum" className="space-y-4">
-              <TabsList>
-                <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-                <TabsTrigger value="course-landing-page">
-                  Course Landing Page
-                </TabsTrigger>
-                <TabsTrigger value="settings">Settings</TabsTrigger>
-              </TabsList>
+       <TabsList
+    className="w-[500px] flex justify-between p-2 rounded-2xl bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 shadow-xl"
+  >
+    {["curriculum", "course-landing-page", "settings"].map((tab) => (
+      <TabsTrigger
+        key={tab}
+        value={tab}
+        className="w-full text-center relative px-5 py-2 font-semibold via-purple-700 transition-all
+                   hover:bg-white/20 hover:shadow-md
+                   data-[state=active]:text-indigo-700"
+      >
+        <span className="relative z-10">{tab.replace("-", " ").toUpperCase()}</span>
+        {/* Slim white background for active tab */}
+        <span
+          className="absolute bottom-1 left-1 right-1 top-1/4 bg-white rounded-xl z-0 transition-all duration-300
+                     data-[state=active]:opacity-100"
+        />
+      </TabsTrigger>
+    ))}
+  </TabsList>
               <TabsContent value="curriculum">
              <CourseCurriculum />
               </TabsContent>
