@@ -208,12 +208,26 @@ function StudentViewCoursesPage() {
                           {courseItem?.instructorName}
                         </span>
                       </p>
+                      <p className="text-sm text-gray-600">
+                        Category{" "}
+                        <span className="font-semibold">
+                          {courseItem?.category
+                            ?.replace(/-/g, " ").toUpperCase()}  
+
+                        </span>
+                      </p>
+                          <p className="text-sm text-gray-600">
+                        Languadge{" "}
+                        <span className="font-semibold">
+                          {courseItem?.primaryLanguage.toUpperCase()}  
+
+                        </span>
+                      </p>
                       <p className="text-sm text-gray-600 mt-2">
-                        {`${courseItem?.curriculum?.length} ${
-                          courseItem?.curriculum?.length <= 1
+                        {`${courseItem?.curriculum?.length} ${courseItem?.curriculum?.length <= 1
                             ? "Lecture"
                             : "Lectures"
-                        } - ${courseItem?.level.toUpperCase()} Level`}
+                          } - ${courseItem?.level.toUpperCase()} Level`}
                       </p>
                       <p className="font-bold text-indigo-600 mt-2">
                         ${courseItem?.pricing}
@@ -238,11 +252,10 @@ function StudentViewCoursesPage() {
                 <Button
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
-                  className={`rounded-md px-4 py-2 transition-all ${
-                    currentPage === index + 1
+                  className={`rounded-md px-4 py-2 transition-all ${currentPage === index + 1
                       ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-indigo-100"
-                  }`}
+                    }`}
                 >
                   {index + 1}
                 </Button>
