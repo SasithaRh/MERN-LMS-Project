@@ -189,6 +189,7 @@ function StudentViewCoursesPage() {
             {currentCourses && currentCourses.length > 0 ? (
               currentCourses.map((courseItem) => (
                 <Card
+                   onClick={() => navigate(`/course/details/${courseItem?._id}`)}
                   key={courseItem?._id}
                   className="cursor-pointer hover:shadow-xl transition-all border border-gray-200 rounded-xl"
                 >
