@@ -14,7 +14,8 @@ import { AuthContext } from "../../../context/auth-context";
 import { StudentContext } from "../../../context/student-context";
 import {
 
-  fetchStudentViewCourseDetailsService,
+  createPaymentService,
+   fetchStudentViewCourseDetailsService,
 } from "../../../services";
 import { CheckCircle, Globe, Lock, PlayCircle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
@@ -40,9 +41,8 @@ function StudentViewCourseDetailsPage() {
   const { id } = useParams();
   const location = useLocation();
 
-  async function fetchStudentViewCourseDetails() {
-
-
+ async function fetchStudentViewCourseDetails() {
+  
     const response = await fetchStudentViewCourseDetailsService(
       currentCourseDetailsId
     );
@@ -62,7 +62,8 @@ function StudentViewCourseDetailsPage() {
   }
 
   async function handleCreatePayment() {
-    const paymentPayload = {
+
+      const paymentPayload = {
       userId: auth?.user?._id,
       userName: auth?.user?.userName,
       userEmail: auth?.user?.userEmail,
@@ -80,6 +81,16 @@ function StudentViewCourseDetailsPage() {
       coursePricing: studentViewCourseDetails?.pricing,
     };
 
+    console.log(paymentPayload, "paymentPayload");
+    const response = await createPaymentService(paymentPayload);
+// console.log(response, "response")
+    if (response.success) {
+      sessionStorage.setItem(
+        "currentOrderId",
+        JSON.stringify(response?.data?.orderId)
+      );
+      setApprovalUrl(response?.data?.approveUrl);
+    }
 
   }
 

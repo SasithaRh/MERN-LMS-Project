@@ -6,6 +6,7 @@ import authRouters from './routes/auth-routes/index.js'
 import mediaRoutes from './routes/instructor-routes/media-routes.js';
 import instructorCourseRoutes from"./routes/instructor-routes/course-routes.js";
 import studentViewCourseRoutes from "./routes/student-routes/course-routes.js";
+import studentViewOrderRoutes from "./routes/student-routes/order-routes.js";
 dotenv.config();
 
 
@@ -40,6 +41,7 @@ app.use("/auth", authRouters);
 app.use("/media", mediaRoutes);
 app.use("/instructor/course", instructorCourseRoutes);
 app.use("/student/course", studentViewCourseRoutes);
+app.use("/student/order", studentViewOrderRoutes);
 app.listen(5000, () => {
     console.log('Server is running on port 5000!!!');
   });
