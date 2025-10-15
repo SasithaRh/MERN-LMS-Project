@@ -16,7 +16,7 @@ import { ArrowUpDownIcon } from "lucide-react";
 import { filterOptions, sortOptions } from "../../../config";
 import { AuthContext } from "../../../context/auth-context";
 import { StudentContext } from "../../../context/student-context";
-import { fetchStudentViewCourseListService } from "../../../services";
+import { fetchStudentViewCourseListService,  checkCoursePurchaseInfoService, } from "../../../services";
 
 // Helper: converts filters into query string
 function createSearchParamsHelper(filterParams) {
@@ -76,6 +76,20 @@ function StudentViewCoursesPage() {
       setStudentViewCoursesList(response?.data);
     }
     setLoadingState(false);
+  }
+ async function handleCourseNavigate(getCurrentCourseId) {
+    const response = await checkCoursePurchaseInfoService(
+      getCurrentCourseId,
+      auth?.user?._id
+    );
+
+    if (response?.success) {
+      if (response?.data) {
+        navigate(`/course-progress/${getCurrentCourseId}`);
+      } else {
+        navigate(`/course/details/${getCurrentCourseId}`);
+      }
+    }
   }
 
   // Handle filters in URL
@@ -189,7 +203,7 @@ function StudentViewCoursesPage() {
             {currentCourses && currentCourses.length > 0 ? (
               currentCourses.map((courseItem) => (
                 <Card
-                   onClick={() => navigate(`/course/details/${courseItem?._id}`)}
+                    onClick={() => handleCourseNavigate(courseItem?._id)}
                   key={courseItem?._id}
                   className="cursor-pointer hover:shadow-xl transition-all border border-gray-200 rounded-xl"
                 >

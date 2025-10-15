@@ -123,3 +123,10 @@ export async function fetchStudentBoughtCoursesService(studentId) {
 
   return data;
 }
+export async function checkCoursePurchaseInfoService(courseId, studentId) {
+  const { data } = await axiosInstance.get(
+    `/student/course/purchase-info/${courseId}/${studentId}`
+  );
+
+  return data;
+}
