@@ -13,7 +13,7 @@ import VideoPlayer from "../../../components/video-player";
 import { AuthContext } from "../../../context/auth-context";
 import { StudentContext } from "../../../context/student-context";
 import {
-
+  checkCoursePurchaseInfoService,
   createPaymentService,
    fetchStudentViewCourseDetailsService,
 } from "../../../services";
@@ -43,6 +43,20 @@ function StudentViewCourseDetailsPage() {
 
  async function fetchStudentViewCourseDetails() {
   
+   const checkCoursePurchaseInfoResponse =
+      await checkCoursePurchaseInfoService(
+        currentCourseDetailsId,
+        auth?.user._id
+      );
+
+    if (
+      checkCoursePurchaseInfoResponse?.success &&
+      checkCoursePurchaseInfoResponse?.data
+    ) {
+      navigate(`/course-progress/${currentCourseDetailsId}`);
+      return;
+    }
+
     const response = await fetchStudentViewCourseDetailsService(
       currentCourseDetailsId
     );

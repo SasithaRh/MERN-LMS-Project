@@ -16,6 +16,18 @@ function StudentHomePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 8;
 
+    function handleNavigateToCoursesPage(getCurrentId) {
+    console.log(getCurrentId);
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      category: [getCurrentId],
+    };
+
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+
+    navigate("/courses");
+  }
+  
   async function fetchAllStudentViewCourses() {
     const response = await fetchStudentViewCourseListService();
     if (response?.success) setStudentViewCoursesList(response?.data);
@@ -82,7 +94,7 @@ function StudentHomePage() {
           {courseCategories.map((categoryItem) => (
             <Button
               key={categoryItem.id}
-              onClick={() => navigate(`/courses?category=${categoryItem.label}`)}
+             onClick={() => handleNavigateToCoursesPage(categoryItem.id)}
               className="justify-start bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 font-semibold hover:from-indigo-200 hover:to-purple-200 hover:scale-105 transition-all rounded-lg shadow-sm"
             >
               {categoryItem.label}

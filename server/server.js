@@ -8,6 +8,9 @@ import instructorCourseRoutes from"./routes/instructor-routes/course-routes.js";
 import studentViewCourseRoutes from "./routes/student-routes/course-routes.js";
 import studentViewOrderRoutes from "./routes/student-routes/order-routes.js";
 import studentCoursesRoutes from "./routes/student-routes/student-courses-routes.js";
+import studentCourseProgressRoutes from"./routes/student-routes/course-progress-routes.js";
+
+
 dotenv.config();
 
 
@@ -44,6 +47,7 @@ app.use("/instructor/course", instructorCourseRoutes);
 app.use("/student/course", studentViewCourseRoutes);
 app.use("/student/order", studentViewOrderRoutes);
 app.use("/student/courses-bought", studentCoursesRoutes);
+app.use("/student/course-progress", studentCourseProgressRoutes);
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000!!!');

@@ -70,7 +70,9 @@ function StudentCoursesPage() {
               </CardContent>
               <CardFooter className="p-4">
                 <Button
-                  onClick={() => navigate(`/student/course/${course._id}`)}
+                   onClick={() =>
+                    navigate(`/course-progress/${course?.courseId}`)
+                  }
                   className="flex items-center justify-center w-full bg-indigo-600 text-white hover:bg-indigo-700 transition-all"
                 >
                   <Watch className="mr-2 h-4 w-4" />
